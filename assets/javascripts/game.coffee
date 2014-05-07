@@ -566,7 +566,7 @@
               @data.seedYield()
             @data["riceYield"] = 0 if @data["riceYield"] < 0
 
-            @message = ""
+            @message = "\n\n\nrandomizing events...\n    calculating costs and yields... DONE! \n\n"
             if @data["prepMethod"] is "TRACTOR"
               @data["riceYield"] *= 1.07
               @message += """
@@ -760,7 +760,7 @@
             if @data["typhoonLevel"] <= 4
               @message = "\nYour prayer has worked. The typhoon missed your area!\n"
             else
-              @message = "\nSECOND TYPHOON WARNING. ITS COMING YOUR WAY.\n"
+              @message = "\nSECOND TYPHOON WARNING. IT'S COMING YOUR WAY.\n"
 
             @message += """
 
@@ -1033,8 +1033,7 @@
               LAND PREPARATION -- PLOWING AND HARROWING
 
               """
-            console.log @data["landPrep"]
-            if @data["landPrep"] is "TRACTOR"
+            if @data["prepMethod"] is "TRACTOR"
               @message += """
                     #{@data["farmSize"] * @TRACTOR_HOURS / 8} TRACTOR DAYS @#{8 * @TRACTOR_RATE} PESOS/DAY
                 #{sprintf(@FMT2, "  ", @totalCosts("landPrep"))}
@@ -1201,17 +1200,20 @@
 
                  Feels good to own your own land - DOESN'T IT???
 
+
               """
             if profit < @data["farmSize"] * 2800
               @message += """
                 YOU ARE ONE HECK OF A POOR FARMER - YOUR KIDS WILL STARVE
                 AT THAT RATE.  YOU MADE AT LEAST ONE terrible DECISION.
                 YOU HAD BETTER CORRECT IT BEFORE NEXT SEASON.
+
                 """
             else if profit < @data["farmSize"] * 4500
               @message += """
                 THAT IS NOT A GOOD YEAR AT ALL. BETTER IMPROVE YOUR TECHNIQUE
-                OR YOU WILL LOOSE THE LAND YOU WORKED SO HARD TO EARN
+                OR YOU WILL LOSE THE LAND YOU WORKED SO HARD TO EARN
+
                 """
             @message += """
               ----------------------------------------------------------------
@@ -1291,6 +1293,20 @@
                 when "10" then @transition "setMarketValue"
             return
 
+        goodbye:
+          _onEnter: ->
+            @message = """
+
+
+
+                     THANKS FOR PLAYING RICEGROW!
+
+
+
+              """
+
+          input: (line) ->
+            return
       #
       # Other utility functions
       #
@@ -1412,7 +1428,7 @@
 
       autofocus: true
       animateScroll: true
-      welcomeMessage: "    ARE YOU FAMILIAR ENOUGH WITH THE PROGRAM TO WISH TO SKIP\n    ALL PRELIMINARIES? "
+      welcomeMessage: "    ARE YOU FAMILIAR ENOUGH WITH THE PROGRAM TO WISH TO SKIP\n    ALL PRELIMINARIES?  "
     )
     return
 

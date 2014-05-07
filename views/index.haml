@@ -24,19 +24,100 @@
     .container.main-container
       .row
         .col-lg-12
-          %h1 Ricegrow
+          %h1 RicegrowJS
       .row
         .col-lg-12
           #console1.console1
       .row
         .col-lg-12
+          %h2 About Ricegrow
+          %p
+            %em Ricegrow
+            is an interactive game designed to teach the player(s) the nature of the risk faced by rice farmers.
+            This game was written by Robert Huke, former heard of the Geography Department at Dartmouth University in New Hampshire.
+            It is based on data obtained while Huke was working at the 
+            %a{ href: "http://irri.org/"} International Rice Research Institute
+            in the Philippines.
+            The original program was written in TrueBasic.
+
+          %p
+            In <em>Ricegrow</em>, you will play the part of  a small farmer in Central Luzon, a major rice growing area of the Philippines.
+            In growing a rice crop during the wet season, you will face the risks or probabilities of crop loss similar to that faced by Philippine farmers.
+            These include loss due to weeds, disease, insects, birds, and rat damage which you can minimize by applying the appropriate inputs.
+            Also included is risk or probability of loss due to typhoon damage over which you have no control.
+            However, the game does not take into account the risk due to change in prices.
+
+          %p
+            It takes just a few minutes to play the game or raise one crop of rice.
+            At the end of each game, you have the opportunity to change one of the inputs and raise another crop of rice.
+
+          %h3 Suggested setup in a class-based setting
+
+          %p
+            The class will be divided into groups of three or four with if possible one member of each group having some agricultural background.
+            After the game is demonstrated, each team will be allowed five
+            %em practice
+            games or grow five crops in a row.
+
+          %p
+            Then each team can take a break and start again from the beginning deciding which inputs you would like to use.
+            This time, they will grow ten crops in a row, making one input change after each crop they desire.
+            The results from these ten crops should be tabulated on sheets of paper to determine their yield and average income over the 10 year period.
+            The data to be recorded are:
+
+          %ol
+            %li Kilograms fertilizer input
+            %li The yield estimate of the farm specialists in kilograms (cavans x 50)
+            %li The actual yield in kilograms
+            %li Gross value of rice (palay) in pesos
+            %li Total expenses
+            %li Net profit
+
+          %p
+            Tell the participants not to worry if the costs and returns do not reflect the current situation.
+            In fact, this game was played for five years (1999-2004) by students in Vietnam (Harvard-Fullbright one year program in economics) where framers face similar risks.
+          %p
+            After the sheets with the results for their 10 year periods have been turned in, announce the winners and losers.
+            Remind the participants that the winners (losers) may just be smart (not so smart) or just plain lucky (unlucky).
+
+          %h4 Assumptions
+
+          %p
+            So that all teams start at more or less the same point, please use the following values at all times:
+
+          %ol
+            %li Size of farm = 1 hectare
+            %li Cost of outside labor = &#8369; 110
+            %li Type of rice = IR64
+            %li Cost of seed = &#8369; 600
+            %li Cost of fertilizer = &#8369; 7/kg Urea
+            %li Market value of rough rice = &#8369; 5.50/kg
+
+          %h4 Hints for participants
+
+          %p
+            Pay attention to the extension lady. She knows what she is talking about.
+            Her yield estimate is a good reflection of crop potential yield before major crop damage.
+
+          %p
+            When you make a change in input, keep a record of the cost before and after you make the change
+            and also check the extension agents yield estimate before and after the change.
+
+          %p
+            %em Google
+            may help if you do not have an agricultural background. Or maybe not.
+
+
+
+      .row
+        .col-lg-12
           .footer
             %p.copyright
-              Copyright &copy;2014
+              Original game &copy;1998 - 2014
+              %a{:href => "http://irri.org"} International Rice Research Institute
+              %br
+              JavaScript port &copy;2014
               %a{:href => "http://bryanbibat.net"} Bryan Bibat
-            %p.powered
-              Made with <a href="http://getbootstrap.com/">Bootstrap</a>, 
-              <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a> and a bunch of JS libraries.
             - if ENV['RACK_ENV'] == 'production'
               %p
                 .g-plusone{"data-size" => "medium"}
