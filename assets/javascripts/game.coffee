@@ -1352,7 +1352,8 @@
             @message = "You cannot use the same value\n"
             @errorFlag = true
         else
-          unless isNaN(parseFloat(response))
+          response = "0" + response if /^\.\d+$/.test(response)
+          unless isNaN(parseFloat(response)) or !/^\d+(\.\d+)?$/.test(response)
             return parseFloat response
           else
             @message = "Please type a number\n"
