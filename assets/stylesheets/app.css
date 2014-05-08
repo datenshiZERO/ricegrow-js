@@ -117,3 +117,7 @@ a {
   font-size: 90%;
   text-align: center;
 }
+
+.fb-share-button > span {
+  vertical-align: baseline !important;
+}

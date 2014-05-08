@@ -261,7 +261,7 @@
             @data.farmSize = @getNumber(@data.farmSize, line)
             unless @errorFlag
               if @data.farmSize >= 5
-                @message = "THAT'S PRETTY LARGE FOR A PEASANT IN LUZON."
+                @message = "\nTHAT'S PRETTY LARGE FOR A PEASANT IN LUZON.\n"
               else
                 @message = ""
               unless @data.runCount > 1
@@ -312,6 +312,9 @@
           input: (line) ->
             @data.costs["seeds"] = @getNumber(@data.costs["seeds"], line)
             unless @errorFlag
+              if @data.costs["seeds"] <= 400
+                @message = "You can not buy it so CHEAPLY - PLEASE REPEAT\n"
+                return
               if @data.costs["seeds"] > 680
                 @message = "expensive seed - it may not be good - too old\n"
                 @data.seedDefectFactor = 0.9
