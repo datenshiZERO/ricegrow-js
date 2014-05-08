@@ -45,17 +45,17 @@
 
       totalCosts: (key) ->
         @data.costs[key] ?= 0
-        return @data.costs[key] * @data["farmSize"]
+        return @data.costs[key] * @data.farmSize
       labor: (key) ->
         @data.hours[key] ?= 0
-        return (@data["farmSize"] * @data["wages"] / 8) * @data.hours[key]
+        return (@data.farmSize * @data.wages / 8) * @data.hours[key]
 
       states:
         startGame:
           input: (line) ->
             response = @getYesNo(line)
             unless @errorFlag
-              @data["skipIntro"] = response
+              @data.skipIntro = response
               if response
                 @transition "mainIntro"
               else
@@ -258,13 +258,13 @@
             return
 
           input: (line) ->
-            @data["farmSize"] = @getNumber(@data["farmSize"], line)
+            @data.farmSize = @getNumber(@data.farmSize, line)
             unless @errorFlag
-              if @data["farmSize"] >= 5
+              if @data.farmSize >= 5
                 @message = "THAT'S PRETTY LARGE FOR A PEASANT IN LUZON."
               else
                 @message = ""
-              unless @data["runCount"] > 1
+              unless @data.runCount > 1
                 @transition "setWages"
               else
                 @transition "startProcessing"
@@ -276,15 +276,15 @@
             return
 
           input: (line) ->
-            @data["wages"] = @getNumber(@data["wages"], line)
+            @data.wages = @getNumber(@data.wages, line)
             unless @errorFlag
-              if @data["wages"] <= 100
+              if @data.wages <= 100
                 @message = "Those are terrible wages - you cheapskate!!!\n"
-              else if @data["wages"] > 139
+              else if @data.wages > 139
                 @message = "Very high wages - I doubt you can afford them\n"
               else
                 @message = ""
-              unless @data["runCount"] > 1
+              unless @data.runCount > 1
                 @transition "setSeedType"
               else
                 @transition "startProcessing"
@@ -296,9 +296,9 @@
             return
 
           input: (line) ->
-            @data["seedType"] = @getResponse("LOCAL,IR64", @data["seedType"], line)
+            @data.seedType = @getResponse("LOCAL,IR64", @data.seedType, line)
             unless @errorFlag
-              unless @data["runCount"] > 1
+              unless @data.runCount > 1
                 @transition "setSeedCost"
               else
                 @transition "startProcessing"
@@ -314,14 +314,14 @@
             unless @errorFlag
               if @data.costs["seeds"] > 680
                 @message = "expensive seed - it may not be good - too old\n"
-                @data["seedDefectFactor"] = 0.9
+                @data.seedDefectFactor = 0.9
               else if @data.costs["seeds"] <= 560
                 @message = "cheap seed - why waste time with it - poor germination\n"
-                @data["seedDefectFactor"] = 0.9
+                @data.seedDefectFactor = 0.9
               else
                 @message = ""
-                @data["seedDefectFactor"] = 1.0
-              unless @data["runCount"] > 1
+                @data.seedDefectFactor = 1.0
+              unless @data.runCount > 1
                 @transition "setPesticide"
               else
                 @transition "startProcessing"
@@ -336,10 +336,10 @@
             response = @getYesNo(line)
             unless @errorFlag
               if response
-                @data["pesticideYieldFactor"] = 1.15
+                @data.pesticideYieldFactor = 1.15
                 @data.costs["earlyPestControl"] = 390
                 @data.hours["earlyPestControl"] = 1.5 * 8
-                unless @data["runCount"] > 1
+                unless @data.runCount > 1
                   @transition "setFertilizer"
                 else
                   @transition "startProcessing"
@@ -358,12 +358,12 @@
             response = @getYesNo(line)
             unless @errorFlag
               if response
-                @data["pesticideYieldFactor"] = 1.15
-                @data.costs["early_pest_control"] = 390
-                @data.hours["early_pest_control"] = 1.5 * 8
+                @data.pesticideYieldFactor = 1.15
+                @data.costs["earlyPestPontrol"] = 390
+                @data.hours["earlyPestControl"] = 1.5 * 8
               else
-                @data["pesticideYieldFactor"] = 1
-              unless @data["runCount"] > 1
+                @data.pesticideYieldFactor = 1
+              unless @data.runCount > 1
                 @transition "setFertilizer"
               else
                 @transition "startProcessing"
@@ -375,16 +375,16 @@
             return
 
           input: (line) ->
-            @data["fertApplRate"] = @getNumber(@data["fertApplRate"], line)
+            @data.fertApplRate = @getNumber(@data.fertApplRate, line)
             unless @errorFlag
-              if @data["fertApplRate"] <= 0
-                @data["fertApplRate"] = 0
+              if @data.fertApplRate <= 0
+                @data.fertApplRate = 0
                 @transition "setLandPrep"
               else
-                if @data["fertApplRate"] > 400
+                if @data.fertApplRate > 400
                   @message = """
 
-                    #{@data["fertApplRate"]} KG. OF UREA CONTAINS #{@data.fertNContent()} KG. OF NITROGEN.
+                    #{@data.fertApplRate} KG. OF UREA CONTAINS #{@data.fertNContent()} KG. OF NITROGEN.
                     YOUR CROP CAN NOT USE THAT MUCH.  YOU MAY CAUSE SOME
                     DAMAGE TO THE ECOSYSTEMS IN NEARBY STREAMS.  AT THE
                     VERY LEAST, YOU HAVE WASTED MANY PESOS.
@@ -402,16 +402,16 @@
             return
 
           input: (line) ->
-            @data["fertCost"] = @getNumber(@data["fertCost"], line)
+            @data.fertCost = @getNumber(@data.fertCost, line)
             unless @errorFlag
-              if @data["fertCost"] <= 6.8
+              if @data.fertCost <= 6.8
                 @message = "You can not buy it so CHEAPLY - PLEASE REPEAT\n"
-              else if @data["fertCost"] > 7.4
+              else if @data.fertCost > 7.4
                 @message = "THAT IS EXPENSIVE FERTILIZER - PLEASE REPEAT\n"
               else
-                @data.costs["fertilizer"] = @data["fertApplRate"] * @data["fertCost"]
-                @data.hours["fertilizer"] = (1.5 + @data["fertApplRate"]/50) * 8 # Hours of labor needed
-                unless @data["runCount"] > 1
+                @data.costs["fertilizer"] = @data.fertApplRate * @data.fertCost
+                @data.hours["fertilizer"] = (1.5 + @data.fertApplRate/50) * 8 # Hours of labor needed
+                unless @data.runCount > 1
                   @transition "setLandPrep"
                 else
                   @transition "startProcessing"
@@ -425,16 +425,16 @@
             return
 
           input: (line) ->
-            @data["prepMethod"] = @getResponse("CARABAO,TRACTOR", @data["prepMethod"], line)
+            @data.prepMethod = @getResponse("CARABAO,TRACTOR", @data.prepMethod, line)
             unless @errorFlag
-              if @data["prepMethod"] is "CARABAO"
+              if @data.prepMethod is "CARABAO"
                 @transition "setCarabaoOwnership"
               else
-                @data["ownOrHire"] = "HIRE"
+                @data.ownOrHire = "HIRE"
                 @message = "\nTHE CURRENT RATE FOR HIRED TRACTOR PLUS DRIVER IS\n" + @TRACTOR_RATE + " PESOS/HOUR.\n"
                 @data.costs["seedbedPrep"] = @CARABAO_RATE * @SEEDBED_PREP_HOURS
                 @data.costs["landPrep"] = @TRACTOR_RATE * @TRACTOR_HOURS
-                unless @data["runCount"] > 1
+                unless @data.runCount > 1
                   @transition "setWeeding"
                 else
                   @transition "startProcessing"
@@ -446,9 +446,9 @@
             return
 
           input: (line) ->
-            @data["ownOrHire"] = @getResponse("OWN,HIRE", @data["ownOrHire"], line)
+            @data.ownOrHire = @getResponse("OWN,HIRE", @data.ownOrHire, line)
             unless @errorFlag
-              if @data["ownOrHire"] is "HIRE"
+              if @data.ownOrHire is "HIRE"
                 @message = "\nTHE CURRENT RATE FOR CARABAO PLUS HANDLER IS " + @CARABAO_RATE + " PESOS/\n" + "HOUR.\n"
                 @data.costs["seedbedPrep"] = @CARABAO_RATE * @SEEDBED_PREP_HOURS
                 @data.costs["landPrep"] = @CARABAO_RATE * @CARABAO_HOURS
@@ -457,7 +457,7 @@
                 @data.costs["landPrep"] = 2.00/6*(@SEEDBED_PREP_HOURS + @CARABAO_HOURS) # (2 pesos/day)/(6 hours/day)x(total hours)
                 @data.hours["landPrep"] = @CARABAO_HOURS
 
-              unless @data["runCount"] > 1
+              unless @data.runCount > 1
                 @transition "setWeeding"
               else
                 @transition "startProcessing"
@@ -478,10 +478,10 @@
             return
 
           input: (line) ->
-            @data["weedingMethod"] = @getResponse(@VALID_WEEDING(), @data["weedingMethod"], line)
+            @data.weedingMethod = @getResponse(@VALID_WEEDING(), @data.weedingMethod, line)
             unless @errorFlag
-              @data.costs["weeding"] = @WEEDING_EFFECTS[@data["weedingMethod"]][2]
-              @data.hours["weeding"] = @WEEDING_EFFECTS[@data["weedingMethod"]][1]
+              @data.costs["weeding"] = @WEEDING_EFFECTS[@data.weedingMethod][2]
+              @data.hours["weeding"] = @WEEDING_EFFECTS[@data.weedingMethod][1]
               @transition "setMolluscicide"
             return
 
@@ -495,7 +495,7 @@
             response = @getYesNo(line)
             unless @errorFlag
               if response
-                @data["snailAttacks"] = 0
+                @data.snailAttacks = 0
                 @data.costs["molluscicide"] = 315
                 @data.hours["molluscicide"] = 18
                 @transition "setWeedingStart"
@@ -526,8 +526,8 @@
 
           input: (line) ->
             @data.weedingDaysStart = @getNumber(@data.weedingDaysStart, line)
-            @transition "setThreshing"  unless @errorFlag or @data["runCount"] > 1
-            @transition "startProcessing" if @data["runCount"] > 1
+            @transition "setThreshing"  unless @errorFlag or @data.runCount > 1
+            @transition "startProcessing" if @data.runCount > 1
 
             return
 
@@ -537,9 +537,9 @@
             return
 
           input: (line) ->
-            @data["threshingMethod"] = @getResponse("HAND,MACHINE", @data["threshingMethod"], line)
-            @transition "setMarketValue" unless @errorFlag or @data["runCount"] > 1
-            @transition "startProcessing" if @data["runCount"] > 1
+            @data.threshingMethod = @getResponse("HAND,MACHINE", @data.threshingMethod, line)
+            @transition "setMarketValue" unless @errorFlag or @data.runCount > 1
+            @transition "startProcessing" if @data.runCount > 1
             return
 
         setMarketValue:
@@ -548,9 +548,9 @@
             return
 
           input: (line) ->
-            @data["price"] = @getNumber(@data["price"], line)
+            @data.price = @getNumber(@data.price, line)
             unless @errorFlag
-              if @data["price"] > 6.35
+              if @data.price > 6.35
                 @message = "\nTHAT'S WAY ABOVE THE LATEST REPORTED MARKET PRICE.\n" + "PLEASE REPEAT THE PRICE PER KILOGRAM.\n"
               else
                 @transition "startProcessing"
@@ -558,43 +558,43 @@
 
         startProcessing:
           _onEnter: ->
-            @data["riceYield"] =
-              @data["pesticideYieldFactor"] * @data["seedDefectFactor"] *
-              @WEEDING_EFFECTS[@data["weedingMethod"]][0] *
+            @data.riceYield =
+              @data.pesticideYieldFactor * @data.seedDefectFactor *
+              @WEEDING_EFFECTS[@data.weedingMethod][0] *
               ( (@data.ureaFactor1() * Math.pow(@data.fertNContent(), 2)) +
                 (@data.ureaFactor2() * @data.fertNContent()) + 1 ) *
               @data.seedYield()
-            @data["riceYield"] = 0 if @data["riceYield"] < 0
+            @data.riceYield = 0 if @data.riceYield < 0
 
             @message = "\n\n\nrandomizing events...\n    calculating costs and yields... DONE! \n\n"
-            if @data["prepMethod"] is "TRACTOR"
-              @data["riceYield"] *= 1.07
+            if @data.prepMethod is "TRACTOR"
+              @data.riceYield *= 1.07
               @message += """
 
                 YOU DID A BEAUTIfUL JOB PREPARING THE FIELDS.
 
                 """
 
-            if @data["weedingDaysStart"] >= 20
+            if @data.weedingDaysStart >= 20
               @message += """
 
                     YOU WAITED TOO LONG TO START THE WEEDING. YOU HAVE 
                     WASTED YOUR TIME AND YOUR LABOR.  TOUGH LUCK!
 
                 """
-              @data["riceYield"] *= 0.7
-            else if @data["weedingDaysStart"] >= 14
+              @data.riceYield *= 0.7
+            else if @data.weedingDaysStart >= 14
               @message += """
 
                     YOU HAVE WAITED SO LONG TO START THE WEEDING THAT IT IS
                     ONLY PARTLY SUCCESSFUL.  BETTER LUCK NEXT TIME.
 
                 """
-              @data["riceYield"] *= 0.85
+              @data.riceYield *= 0.85
 
             @message += "\n"
 
-            if @data["seedType"] is "IR64"
+            if @data.seedType is "IR64"
               r = Math.floor(Math.random() * 4)/100.0    # IR64 IS QUITE RESISTANT
               @message += "LOOKS AS if BACTERIAL BLIGHT AND BLAST HAVE CAUSED ABOUT\n"
             else
@@ -603,7 +603,7 @@
 
             @message += "#{100 * r} PERCENT LOSS OF POTENTIAL YIELD.\n"
 
-            @data["riceYield"] *= (1 - r)
+            @data.riceYield *= (1 - r)
 
             @message += """
 
@@ -624,7 +624,7 @@
         processing2:
           _onEnter: ->
             @message = ""
-            if @data["snailAttacks"] >= 1
+            if @data.snailAttacks >= 1
               @message += """
 
                 You didn't get rid of the snails last year. Too bad - they have
@@ -632,13 +632,13 @@
 
                 """
               r4 = Math.floor(12 + (Math.random() * 6))
-              @data["riceYield"] *= (1 - 0.01 * r4)
+              @data.riceYield *= (1 - 0.01 * r4)
 
 
             @message += """
 
                 THE FARM SPECIALIST ESTIMATES YOUR CROP AS IT NOW STANDS
-                AT #{Math.round(10 * @data["riceYield"] / 50) / 10} CAVANS PER HECTARE.
+                AT #{Math.round(10 * @data.riceYield / 50) / 10} CAVANS PER HECTARE.
 
                 Do you think that SHE is correct?
 
@@ -656,7 +656,7 @@
                        W E L L   DON'T COUNT ON THAT FOR HARVEST!!!!
 
               """
-            unless @data["skipIntro"]
+            unless @data.skipIntro
 
               @message += """
 
@@ -680,7 +680,7 @@
 
                 """
               @insectAttack = Math.floor(Math.random() * 5) + 1
-              if @data["seedType"] is "IR64"
+              if @data.seedType is "IR64"
                 @insectAttack /= 2
               else if @insectAttack <= 0
                 @message += """
@@ -688,7 +688,7 @@
                   """
             else
               @insectAttack = Math.floor(Math.random() * 10) + 1
-              @insectAttack /= 2 if @data["seedType"] is"IR64"         # IR64 resists insect attack.
+              @insectAttack /= 2 if @data.seedType is"IR64"         # IR64 resists insect attack.
 
             @message += """
               THE DEGREE OF INSECT ATTACK THIS YEAR IS #{@insectAttack}
@@ -708,14 +708,14 @@
                 @data.costs["insecticide"] = 0
                 @data.hours["insecticide"] = 0
                 @insectAttack *= 2
-              @data["riceYield"] *= (1.0 - 0.015 * @insectAttack)
+              @data.riceYield *= (1.0 - 0.015 * @insectAttack)
               @transition "processing4"
             return
 
         processing4:
           _onEnter: ->
             @message = ""
-            unless @data["skipIntro"]
+            unless @data.skipIntro
 
               @message += """
 
@@ -758,15 +758,15 @@
 
                   """
 
-              @data["riceYield"] *= (1.0 - 0.015 * r3)
+              @data.riceYield *= (1.0 - 0.015 * r3)
               @transition "processing5"
             return
 
         processing5:
           _onEnter: ->
-            @data["typhoonLevel"] = Math.floor(Math.random() * 10)
+            @data.typhoonLevel = Math.floor(Math.random() * 10)
 
-            if @data["typhoonLevel"] <= 4
+            if @data.typhoonLevel <= 4
               @message = "\nYour prayer has worked. The typhoon missed your area!\n"
             else
               @message = "\nSECOND TYPHOON WARNING. IT'S COMING YOUR WAY.\n"
@@ -782,7 +782,7 @@
           input: (line) ->
             response = @getYesNo(line)
             unless @errorFlag
-              @data["ratDamage"] = Math.abs(Math.sqrt(-2 * Math.log(Math.random()))*Math.sin(2 * Math.PI * Math.random()))     # Rat loss
+              @data.ratDamage = Math.abs(Math.sqrt(-2 * Math.log(Math.random()))*Math.sin(2 * Math.PI * Math.random()))     # Rat loss
               @message = ""
               if response
                 @transition "raticides"
@@ -795,7 +795,7 @@
         raticides:
           _onEnter: ->
             @message = ""
-            unless @data["skipIntro"]
+            unless @data.skipIntro
               @message += """
 
                 ACUTE RATICIDES GIVE SPECTACULAR RESULTS BUT IN THE LONG
@@ -812,11 +812,11 @@
             return
 
           input: (line) ->
-            @data["poison"] = @getResponse("CHRONIC,ACUTE", @data["poison"], line)
+            @data.poison = @getResponse("CHRONIC,ACUTE", @data.poison, line)
             unless @errorFlag
               @message = ""
-              if @data["poison"] is "CHRONIC"
-                unless @data["skipIntro"]
+              if @data.poison is "CHRONIC"
+                unless @data.skipIntro
                   @message = """
 
                     YOU HAVE CHOSEN WARFARIN IN .5% CONCENTRATION. YOU MUST
@@ -828,7 +828,7 @@
                 @data.costs["rodenticide"] = 67.5   # cost of warfarin /ha
                 @data.hours["rodenticide"] = 14 * 3 # Hours of labor to apply warfaran/ha.
               else
-                unless @data["skipIntro"]
+                unless @data.skipIntro
                   @message = """
 
                     YOU WILL USE ZINC PHOSPHIDE. MIX IT WITH 150 PARTS OF 
@@ -850,32 +850,32 @@
             
             #      COMPUTE CROP LOSS WITH RATICIDE
             if @data.costs["rodenticide"] > 0
-              @data["ratDamage"] = Math.floor(@data["ratDamage"] *5)
+              @data.ratDamage = Math.floor(@data.ratDamage *5)
 
               @message += """
 
                 YOU HAVE CUT YOUR POTENTIAL RAT LOSS DRAMATICALLY.
-                CONGRATULATIONS! ONLY #{@data["ratDamage"]} PERCENT OF THE CROP WAS LOST.
+                CONGRATULATIONS! ONLY #{@data.ratDamage} PERCENT OF THE CROP WAS LOST.
 
                 """
 
             #      COMPUTE CROP LOSS WITHOUT RATICIDE
             else
-              @data["ratDamage"] = Math.floor(@data["ratDamage"] * 15)
+              @data.ratDamage = Math.floor(@data.ratDamage * 15)
               
-              if @data["ratDamage"] > 24
+              if @data.ratDamage > 24
                 @message = """
 
                   THE PALAY WAS DOING WELL - BUT, MAN - DID YOU GET HIT BY
                   RATS!! 10 DAYS BEFORE HARVEST THEY DESCENDED LIKE THE PLAGUE
-                  AND RUINED #{@data["ratDamage"]} PERCENT OF YOUR STAND.  EGAD!!
+                  AND RUINED #{@data.ratDamage} PERCENT OF YOUR STAND.  EGAD!!
 
                   """
-              else if @data["ratDamage"] > 12
+              else if @data.ratDamage > 12
                 @message = """
 
                   CROP LOOKED GOOD BUT IN THE WEEK BEFORE HARVEST MANY RATS
-                  CONVERGED ON THE FIELDS AND DESTROYED #{@data["ratDamage"]} PERCENT OF
+                  CONVERGED ON THE FIELDS AND DESTROYED #{@data.ratDamage} PERCENT OF
                   THE STANDING CROP.  BETTER LUCK NEXT YEAR!!
 
                   """
@@ -883,37 +883,37 @@
                 @message = """
 
                   YOU WERE VERY LUCKY THIS SEASON, PALAY GREW WELL AND YOU
-                  LOST ONLY #{@data["ratDamage"]} PERCENT OF THE CROP TO RATS.
+                  LOST ONLY #{@data.ratDamage} PERCENT OF THE CROP TO RATS.
 
                   """
 
-            @data["riceYield"] *= (1 - 0.01 * @data["ratDamage"])  # Total crop x (1-destroyed by rats)
+            @data.riceYield *= (1 - 0.01 * @data.ratDamage)  # Total crop x (1-destroyed by rats)
 
             # 
             #      ***** TYPHOON *****
             # 
-            if @data["typhoonLevel"] > 8
+            if @data.typhoonLevel > 8
               @message += """
 
                 TOUGH LUCK. THE TYPHOON PASSED THROUGH YOUR PROVINCE AND
                 THE CROP IS IN A TERRIBLE MESS.
 
                 """
-              @data["riceYield"] *= 0.65           # 35% yield loss
-            else if @data["typhoonLevel"] > 4
+              @data.riceYield *= 0.65           # 35% yield loss
+            else if @data.typhoonLevel > 4
               @message += """
 
                 THE TYPHOON PASSED CLOSE BY. HIGH WIND AND HEAVY RAIN CAUSED
                 GREAT LODGING BUT MUCH OF THE CROP CAN BE SAVED.
 
                 """
-              @data["riceYield"] *= 0.80           # 20% yield loss
+              @data.riceYield *= 0.80           # 20% yield loss
 
             #
             # 
             #                  **** LOW WAGE LOSS ****
             # 
-            if @data["wages"] < 90
+            if @data.wages < 90
               @message += """
 
 
@@ -922,8 +922,8 @@
 
                 """
 
-              @data["riceYield"] *= 0.75           # 35% yield loss
-            else if @data["wages"] <= 100
+              @data.riceYield *= 0.75           # 35% yield loss
+            else if @data.wages <= 100
               @message += """
 
 
@@ -931,7 +931,7 @@
                 workers.  WHAT A SHAME!     !
 
                 """
-              @data["riceYield"] *= 0.88           # 20% yield loss
+              @data.riceYield *= 0.88           # 20% yield loss
 
             @calculateFinalDetails()
 
@@ -962,9 +962,9 @@
 
 
 
-              RICE TYPE: #{@data["seedType"]}
+              RICE TYPE: #{@data.seedType}
 
-              FARM SIZE: #{@data["farmSize"]} HECTARES
+              FARM SIZE: #{@data.farmSize} HECTARES
               TOTAL YIELD: #{Math.round(@totalYield)} KILOGRAMS
 
                             (#{Math.round(10*@totalYield/50.0)/10} CAVANS PER HA.)
@@ -998,7 +998,7 @@
 
             if @totalCosts("fertilizer") > 0
               @message += """
-                    FERTILIZER (UREA) @#{ @data["fertCost"] } PESOS/KG.
+                    FERTILIZER (UREA) @#{ @data.fertCost } PESOS/KG.
                 #{sprintf(@FMT2, "  ", @totalCosts("fertilizer"))}
                 
                 """
@@ -1027,7 +1027,7 @@
 
               SEEDBED PREPARATION -- 4 DAYS WORKER AND\n
               """
-            if @data["ownOrHire"] is "HIRE"
+            if @data.ownOrHire is "HIRE"
               @message += """
                     CARABAO AT #{6 * @CARABAO_RATE} PESOS PER DAY
                 #{sprintf(@FMT2, "  ", @totalCosts("seedbedPrep"))}
@@ -1051,15 +1051,15 @@
               LAND PREPARATION -- PLOWING AND HARROWING
 
               """
-            if @data["prepMethod"] is "TRACTOR"
+            if @data.prepMethod is "TRACTOR"
               @message += """
-                    #{@data["farmSize"] * @TRACTOR_HOURS / 8} TRACTOR DAYS @#{8 * @TRACTOR_RATE} PESOS/DAY
+                    #{@data.farmSize * @TRACTOR_HOURS / 8} TRACTOR DAYS @#{8 * @TRACTOR_RATE} PESOS/DAY
                 #{sprintf(@FMT2, "  ", @totalCosts("landPrep"))}
                 """
             else
-              if @data["ownOrHire"] is "HIRE"
+              if @data.ownOrHire is "HIRE"
                 @message += """
-                     #{@data["farmSize"] * @CARABAO_HOURS / 6} DAYS FOR CARABAO
+                     #{@data.farmSize * @CARABAO_HOURS / 6} DAYS FOR CARABAO
                       AT #{6 * @CARABAO_RATE} PESOS PER DAY
                   #{sprintf(@FMT2, "  ", @totalCosts("landPrep"))}
                   """
@@ -1088,7 +1088,7 @@
             if @totalCosts("fertilizer") > 0
               @message += """
                 COSTS OF APPLYING FERTILIZER
-                    #{@data["farmSize"] * @data.hours["fertilizer"] / 8} PERSON DAYS @#{@data["wages"]} PESOS/DAY
+                    #{@data.farmSize * @data.hours["fertilizer"] / 8} PERSON DAYS @#{@data.wages} PESOS/DAY
                 #{sprintf(@FMT2, "  ", @labor("fertilizer"))}
                 """
 
@@ -1109,12 +1109,12 @@
               @message += """
                
                 APPLICATION OF PESTICIDE
-                    2 DAYS PER HA. AT #{@data["wages"]} PESOS PER DAY
+                    2 DAYS PER HA. AT #{@data.wages} PESOS PER DAY
                 #{sprintf(@FMT2, "  ", @labor("insecticide"))}\n
                 """
-            unless @data["weedingMethod"] is "0"
+            unless @data.weedingMethod is "0"
               @message += """
-                WEEDING COSTS -- METHOD #{@data["weedingMethod"]}
+                WEEDING COSTS -- METHOD #{@data.weedingMethod}
                     #{@data.hours["weeding"]} HOURS PER HECTARE
                 #{sprintf(@FMT2, "  ", @labor("weeding"))}\n
                 """
@@ -1141,7 +1141,7 @@
               THRESHING
 
               """
-            if @data["threshingMethod"] is "HAND"
+            if @data.threshingMethod is "HAND"
               @message += sprintf(@FMT2, "RATE ABOUT 40 KG/HR", @labor("threshing")/2) + "\n"
             else
               @message += sprintf(@FMT2, "COST BY MACHINE - 5% OF YIELD", @totalCosts("threshing")) + "\n"
@@ -1199,7 +1199,7 @@
         summary:
           _onEnter: ->
             totalOperatingCosts = (@operatingCosts + @totalCosts("irrigation") + @totalCosts("landTax") + @mortgage)
-            profit = (@totalYield * @data["price"]) - totalOperatingCosts
+            profit = (@totalYield * @data.price) - totalOperatingCosts
             profit = Math.round(profit * 100) / 100
 
             @message = """
@@ -1207,8 +1207,8 @@
               S U M M A R Y
                                                       LAND REFORM OWNER
                 TOTAL VALUE OF #{Math.round(@totalYield * 100) / 100} KILOGRAMS
-                OF PALAY AT #{ @data["price"] }
-                PESOS PER KILOGRAM                        #{Math.round(@totalYield * @data["price"] * 100) / 100}
+                OF PALAY AT #{ @data.price }
+                PESOS PER KILOGRAM                        #{Math.round(@totalYield * @data.price * 100) / 100}
 
                 LESS TOTAL EXPENSES                       #{Math.round(totalOperatingCosts * 100) / 100}
                                                    --------------------
@@ -1219,14 +1219,14 @@
 
 
               """
-            if profit < @data["farmSize"] * 2800
+            if profit < @data.farmSize * 2800
               @message += """
                 YOU ARE ONE HECK OF A POOR FARMER - YOUR KIDS WILL STARVE
                 AT THAT RATE.  YOU MADE AT LEAST ONE terrible DECISION.
                 YOU HAD BETTER CORRECT IT BEFORE NEXT SEASON.
 
                 """
-            else if profit < @data["farmSize"] * 4500
+            else if profit < @data.farmSize * 4500
               @message += """
                 THAT IS NOT A GOOD YEAR AT ALL. BETTER IMPROVE YOUR TECHNIQUE
                 OR YOU WILL LOSE THE LAND YOU WORKED SO HARD TO EARN
@@ -1244,7 +1244,7 @@
         runAgain:
           _onEnter: ->
             @message = "\n\n"
-            unless @data["skipIntro"]
+            unless @data.skipIntro
               @message += """
                 YOU WILL NOW HAVE THE OPTION OF RERUNNING THE PROGRAM.
                 YOU MAY KEEP THE SAME RICE TYPE OR YOU MAY CHANGE.
@@ -1271,7 +1271,7 @@
 
         changeFactors:
           _onEnter: ->
-            @data["runCount"]++
+            @data.runCount++
             @message = """
               WHICH FACTOR DO YOU WISH TO CHANGE
 
@@ -1383,7 +1383,7 @@
         # 
         #  HARVESTING
         # 
-        @data.hours["harvesting"] = 0.0311 * @data["riceYield"] # .0311=number of hours to harvest 1kg.
+        @data.hours["harvesting"] = 0.0311 * @data.riceYield # .0311=number of hours to harvest 1kg.
 
         # 
         # 
@@ -1391,17 +1391,17 @@
         # 
         @data.costs["threshing"] = @data.hours["threshing"] = 0
 
-        if @data["threshingMethod"] is "MACHINE"
-          @data["riceYield"] *= 0.97                 # 3% extra loss for machine use
-          @data.costs["threshing"] = 0.05 * @data["riceYield"] * @data["price"]   # 5% of crop goes to machine owner
+        if @data.threshingMethod is "MACHINE"
+          @data.riceYield *= 0.97                 # 3% extra loss for machine use
+          @data.costs["threshing"] = 0.05 * @data.riceYield * @data.price   # 5% of crop goes to machine owner
         else
-          @data.hours["threshing"] = 0.05 * @data["riceYield"]
+          @data.hours["threshing"] = 0.05 * @data.riceYield
 
         # 
         # 
         #  HAULING
         # 
-        @data.costs["hauling"] = 0.012 * @data["riceYield"]
+        @data.costs["hauling"] = 0.012 * @data.riceYield
 
         # 
         #      ******************************
@@ -1429,12 +1429,12 @@
         subtotal += @labor("rodenticide")              # Application of rodenticide
         subtotal += @labor("harvesting")               # Harvesting cost
         subtotal += @totalCosts("threshing")          # Cost for machine threshing
-        subtotal += @labor("threshing")                # Cost for hand threshing
+        subtotal += @labor("threshing")               # Cost for hand threshing
         subtotal += @totalCosts("hauling")            # Hauling cost
         @operatingCosts = subtotal                    # Total operating costs
         
-        @totalYield = @data["riceYield"] * @data["farmSize"]
-        @mortgage = (@totalYield * @data["price"]) * 4 * 0.07
+        @totalYield = @data.riceYield * @data.farmSize
+        @mortgage = (@totalYield * @data.price) * 4 * 0.07
         
         
     )
