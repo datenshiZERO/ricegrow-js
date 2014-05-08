@@ -5,13 +5,12 @@
     %meta{:content => "IE=Edge,chrome=1", "http-equiv" => "X-UA-Compatible"}/
     %meta{:content => "width=device-width, initial-scale=1.0", :name => "viewport"}/
     %link{:href=>"//netdna.bootstrapcdn.com/bootswatch/3.1.1/darkly/bootstrap.min.css", :rel=>"stylesheet"}
-    %link{:href=>"//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css", :rel=>"stylesheet"}
-    %title WDFAC
-    %meta{:content => "Reverse Lane Defense with Rock-Paper-Scissors creeps", :name => "description"}/
-    %meta{:content => "WDFAC", :property => "og:title"}/
-    %meta{:content => "Reverse Lane Defense with Rock-Paper-Scissors creeps", :property => "og:description"}/
+    %title RicegrowJS
+    %meta{:content => "Educational text-based rice farming game", :name => "description"}/
+    %meta{:content => "RicegrowJS", :property => "og:title"}/
+    %meta{:content => "Educational text-based rice farming game", :property => "og:description"}/
     %meta{:content => "website", :property => "og:type"}/
-    %meta{:content => "https://datenshizero.github.io/wdfac", :property => "og:url"}/
+    %meta{:content => "http://datenshizero.github.io/ricegrow-js", :property => "og:url"}/
     %meta{:content => image_path("opengraph.png"), :property => "og:image"}/
     %link{:href => "./favicon.ico", :rel => "shortcut icon"}/
     %link{:rel => "stylesheet", :href => stylesheet_path('app') } 
@@ -107,6 +106,23 @@
             %em Google
             may help if you do not have an agricultural background. Or maybe not.
 
+          %h2 About this port
+
+          %p
+            I didn't have high-speed internet for 5 days and was bored out of my mind.
+            After poking around my hard drive, I found the source code and documentation for the original 1998 True BASIC version of Ricegrow, 
+            which was provided to us by IRRI during their <a href="http://rice-hackathon.irri.org/">2012 hackathon</a>.
+            Under the excuse of commemorating the 50th year of BASIC (my first programming language), I eventually decided to spend a day 
+            %a{ href: "https://github.com/datenshiZERO/ricegrow-rb" } porting
+            it to Ruby.
+
+          %p
+            Spent a couple more days porting it to JavaScript / CoffeeScript.
+
+          %p
+            Both the program text and documentation above (<strong>About Ricegrow</strong>) are almost direct copies of the originals 
+            i.e. I retained the formatting and even some of the more endearing typos.
+
 
 
       .row
@@ -114,19 +130,18 @@
           .footer
             %p.copyright
               Original game &copy;1998 - 2014
-              %a{:href => "http://irri.org"} International Rice Research Institute
+              %a{:href => "http://irri.org"} IRRI
               %br
               JavaScript port &copy;2014
               %a{:href => "http://bryanbibat.net"} Bryan Bibat
             - if ENV['RACK_ENV'] == 'production'
               %p
                 .g-plusone{"data-size" => "medium"}
-                %a.twitter-share-button{"data-text" => "Play WDFAC, a DotA inspired game where battles are decided by Rock-Paper-Scissors!", href: "https://twitter.com/share"} Tweet
+                %a.twitter-share-button{"data-text" => "Play RicegrowJS, an interactive game designed to teach players the nature of the risk faced by rice farmers", href: "https://twitter.com/share"} Tweet
                 .fb-share-button{"data-type" => "button_count"}
             %p 
               %a{ href: "https://github.com/datenshiZERO/wdfac" } Fork this on Github
     %script{:type => "text/javascript", :src => "//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.min.js"}
-    %script{:type => "text/javascript", :src => "//cdnjs.cloudflare.com/ajax/libs/fastclick/0.6.11/fastclick.min.js"}
     %script{:type => "text/javascript", :src => javascript_path("app")}
     - if ENV['RACK_ENV'] == 'production'
       / Piwik
