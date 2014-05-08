@@ -19,7 +19,7 @@
       VALID_WEEDING: ->
         _.keys(@WEEDING_EFFECTS).join ","
       SEEDBED_PREP_HOURS: 24 # 4 days x 6 hours/day for seedbed preparation
-      TRACTOR_HOURS: 3       # Hours for tractor use in land preparation/ ha
+      TRACTOR_HOURS: 32      # Hours for tractor use in land preparation/ ha
       CARABAO_HOURS: 72      # Hours for carabao use in land preparation/ ha
                              # a carabao works a six hour day
       TRACTOR_RATE: 45       # Standard hourly rate for tractor and driver '98
@@ -392,7 +392,7 @@
 
                     """
                 else
-                  @message = ""
+                  @message = "\n"
                 @transition "setFertilizer2"
             return
 
@@ -405,9 +405,9 @@
             @data["fertCost"] = @getNumber(@data["fertCost"], line)
             unless @errorFlag
               if @data["fertCost"] <= 6.8
-                @message = "You can not buy it so CHEAPLY - PLEASE REPEAT"
+                @message = "You can not buy it so CHEAPLY - PLEASE REPEAT\n"
               else if @data["fertCost"] > 7.4
-                @message = "THAT IS EXPENSIVE FERTILIZER - PLEASE REPEAT"
+                @message = "THAT IS EXPENSIVE FERTILIZER - PLEASE REPEAT\n"
               else
                 @data.costs["fertilizer"] = @data["fertApplRate"] * @data["fertCost"]
                 @data.hours["fertilizer"] = (1.5 + @data["fertApplRate"]/50) * 8 # Hours of labor needed
@@ -525,7 +525,7 @@
             return
 
           input: (line) ->
-            @weedingDaysStart = @getNumber(@weedingDaysStart, line)
+            @data.weedingDaysStart = @getNumber(@data.weedingDaysStart, line)
             @transition "setThreshing"  unless @errorFlag or @data["runCount"] > 1
             @transition "startProcessing" if @data["runCount"] > 1
 
@@ -577,14 +577,18 @@
 
             if @data["weedingDaysStart"] >= 20
               @message += """
+
                     YOU WAITED TOO LONG TO START THE WEEDING. YOU HAVE 
                     WASTED YOUR TIME AND YOUR LABOR.  TOUGH LUCK!
+
                 """
               @data["riceYield"] *= 0.7
             else if @data["weedingDaysStart"] >= 14
               @message += """
+
                     YOU HAVE WAITED SO LONG TO START THE WEEDING THAT IT IS
                     ONLY PARTLY SUCCESSFUL.  BETTER LUCK NEXT TIME.
+
                 """
               @data["riceYield"] *= 0.85
 
@@ -609,6 +613,7 @@
 
 
               What is YOUR prayer?
+
               """
             return
 
@@ -636,6 +641,7 @@
                 AT #{Math.round(10 * @data["riceYield"] / 50) / 10} CAVANS PER HECTARE.
 
                 Do you think that SHE is correct?
+
             """
             return
 
@@ -688,6 +694,7 @@
               THE DEGREE OF INSECT ATTACK THIS YEAR IS #{@insectAttack}
 
               DO YOU WISH TO SPRAY AN INSECTICIDE?
+
               """
             return
 
@@ -714,10 +721,12 @@
 
                 BEING A GOOD ECOLOGY MINDED FARMER YOU DID NOT KILL OR 
                 POISON THE BIRDS. THEY ARE NOW EATING THE RIPENING GRAIN.
+
                 """
             @message += """
 
               DO YOU WISH TO PROTECT YOUR CROP AGAINST BIRDS?
+
               """
             return
 
@@ -766,6 +775,7 @@
 
               RATS ARE ATTACKING RICE IN SOME FIELDS TO THE SOUTH OF YOUR
               FARM - DO YOU WISH TO SET OUT POISON?
+
               """
             return
 
@@ -791,17 +801,20 @@
                 ACUTE RATICIDES GIVE SPECTACULAR RESULTS BUT IN THE LONG
                 RUN CHRONIC POISONS ARE MORE EFFECTIVE AS WELL AS MORE
                 COSTLY AND TIME CONSUMING,
+
                 """
 
             @message += """
 
               DO YOU WISH TO USE 'CHRONIC' OR 'ACUTE' POISON?
+
               """
             return
 
           input: (line) ->
             @data["poison"] = @getResponse("CHRONIC,ACUTE", @data["poison"], line)
             unless @errorFlag
+              @message = ""
               if @data["poison"] is "CHRONIC"
                 unless @data["skipIntro"]
                   @message = """
@@ -809,6 +822,7 @@
                     YOU HAVE CHOSEN WARFARIN IN .5% CONCENTRATION. YOU MUST
                     MIX IT WITH 19 PARTS OF CEREAL, WRAP IT IN BANANA LEAVES
                     AND PLACE IT ALONG RAT RUNS.  DO THIS EACH DAY FOR 2 WEEKS.
+
                     """
 
                 @data.costs["rodenticide"] = 67.5   # cost of warfarin /ha
@@ -823,6 +837,7 @@
                     CAUSING TOTAL PARALYSIS OF THE CENTRAL NERVOUS SYSTEM. IT
                     IS VERY DANGEROUS. SOMEONE MAY GET HURT. RATS POISONED THIS
                     WAY ARE RENDERED INEDIBLE!
+
                     """
                 @data.costs["rodenticide"] = 48     # Cost / ha for zinc phosphide
                 @data.hours["rodenticide"] = 3 * 3  # Hours to apply zinc/ha.
@@ -837,7 +852,7 @@
             if @data.costs["rodenticide"] > 0
               @data["ratDamage"] = Math.floor(@data["ratDamage"] *5)
 
-              @message = """
+              @message += """
 
                 YOU HAVE CUT YOUR POTENTIAL RAT LOSS DRAMATICALLY.
                 CONGRATULATIONS! ONLY #{@data["ratDamage"]} PERCENT OF THE CROP WAS LOST.
@@ -901,6 +916,7 @@
             if @data["wages"] < 90
               @message += """
 
+
                 Your wages are so low that it is almost impossible to hire
                 anyone. Work has been delayed and yield has suffered!
 
@@ -910,8 +926,9 @@
             else if @data["wages"] <= 100
               @message += """
 
-                Your wages are so low that it is almost impossible to hire
-                anyone. Work has been delayed and yield has suffered!
+
+                Your wage rate is so low that you attracted only very LAZY
+                workers.  WHAT A SHAME!     !
 
                 """
               @data["riceYield"] *= 0.88           # 20% yield loss
@@ -921,6 +938,7 @@
             @message += """
               
               WOULD YOU LIKE A COMPLETE COST-YIELD ANALYSIS?
+
               """
             return
 
@@ -1180,7 +1198,6 @@
 
         summary:
           _onEnter: ->
-            console.log this
             totalOperatingCosts = (@operatingCosts + @totalCosts("irrigation") + @totalCosts("landTax") + @mortgage)
             profit = (@totalYield * @data["price"]) - totalOperatingCosts
             profit = Math.round(profit * 100) / 100
@@ -1273,10 +1290,11 @@
 
               Remember, in a controlled experiment you can change only
               ONE factor at a time! WHICH ONE???
+
               """
 
           input: (line) ->
-            @rerunFactor = @getResponse([1..10].join(","), @rerunFactor, line)
+            @rerunFactor = @getResponse([0..10].join(","), @rerunFactor, line)
 
             unless @errorFlag
               switch @rerunFactor
@@ -1306,6 +1324,7 @@
               """
 
           input: (line) ->
+            @message = ""
             return
       #
       # Other utility functions
@@ -1318,7 +1337,7 @@
           return response is "YES" or response is "Y"
         else
           @errorFlag = true
-          @message = "Please enter 'YES' or 'NO'"
+          @message = "Please enter 'YES' or 'NO'\n"
         return
 
       getNumber: (original, line) ->
@@ -1330,13 +1349,13 @@
             @sameFlag = true
             return original
           else
-            @message = "You cannot use the same value"
+            @message = "You cannot use the same value\n"
             @errorFlag = true
         else
           unless isNaN(parseFloat(response))
             return parseFloat response
           else
-            @message = "Please type a number"
+            @message = "Please type a number\n"
             @errorFlag = true
         return
 
@@ -1349,13 +1368,13 @@
             @sameFlag = true
             return original
           else
-            @message = "You cannot use the same value"
+            @message = "You cannot use the same value\n"
             @errorFlag = true
         else
           if _.contains(valid.split(","), response)
             return response
           else
-            @message = "That is not a legal response. Please retype."
+            @message = "That is not a legal response. Please retype.\n"
             @errorFlag = true
         return
       
@@ -1419,17 +1438,16 @@
         
         
     )
-    console1 = $("#console1")
-    controller1 = console1.console(
-      promptLabel: "> "
-      commandHandle: (line) ->
-        gameFsm.handle "input", line
-        gameFsm.message
 
-      autofocus: true
-      animateScroll: true
-      welcomeMessage: "    ARE YOU FAMILIAR ENOUGH WITH THE PROGRAM TO WISH TO SKIP\n    ALL PRELIMINARIES?  "
-    )
+    console = $("#console").jqconsole("    ARE YOU FAMILIAR ENOUGH WITH THE PROGRAM TO WISH TO SKIP\n    ALL PRELIMINARIES?  \n", "> ")
+    prompt = ->
+      console.Prompt(false, (line) ->
+        gameFsm.handle "input", line
+        console.Write(gameFsm.message)
+        prompt()
+      )
+      return
+    prompt()
     return
 
   return
