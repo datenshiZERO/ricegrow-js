@@ -569,12 +569,12 @@
               @data.seedYield()
             @data.riceYield = 0 if @data.riceYield < 0
 
-            @message = "\n\n\nrandomizing events...\n    calculating costs and yields... DONE! \n\n"
+            @message = "\n\nrandomizing events...\n    calculating costs and yields... DONE! \n\n"
             if @data.prepMethod is "TRACTOR"
               @data.riceYield *= 1.07
               @message += """
 
-                YOU DID A BEAUTIfUL JOB PREPARING THE FIELDS.
+                YOU DID A BEAUTIFUL JOB PREPARING THE FIELDS.
 
                 """
 
@@ -770,9 +770,9 @@
             @data.typhoonLevel = Math.floor(Math.random() * 10)
 
             if @data.typhoonLevel <= 4
-              @message = "\nYour prayer has worked. The typhoon missed your area!\n"
+              @message += "\nYour prayer has worked. The typhoon missed your area!\n"
             else
-              @message = "\nSECOND TYPHOON WARNING. IT'S COMING YOUR WAY.\n"
+              @message += "\nSECOND TYPHOON WARNING. IT'S COMING YOUR WAY.\n"
 
             @message += """
 
@@ -1252,7 +1252,7 @@
                 YOU WILL NOW HAVE THE OPTION OF RERUNNING THE PROGRAM.
                 YOU MAY KEEP THE SAME RICE TYPE OR YOU MAY CHANGE.
                 IN EITHER CASE THE INPUTS WILL REMAIN AS FOR THE FIRST
-                CROP UNTIL YOU DECIDE TO ADOPT A DifFERENT TECHNOLOGY.
+                CROP UNTIL YOU DECIDE TO ADOPT A DIFFERENT TECHNOLOGY.
                 """
             @message += """
 
