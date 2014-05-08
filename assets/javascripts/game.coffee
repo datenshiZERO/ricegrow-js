@@ -477,7 +477,7 @@
 
         setWeeding2:
           _onEnter: ->
-            @message = "\nPlease note the following:\n" + "   A. WEEDS COMPETE VIGOROUSLY WITH RICE AND LOWER\n" + "      THE POTENTIAL YIELD.\n" + "   B. WHEN A HAND WEEDING IS DONE IN COMBINATION WITH\n" + "      ANOTHER METHOD, THE HAND WEEDING IS USUALLY DONE\n" + "      LAST (I.E. '31', NOT '13'!)\n" + "   C. if YOU DESIRE NO WEEDING, ENTER 0 (ZERO).\n" + "\n" + "What weeding method(s) do you wish to use\n"
+            @message = "\nPlease note the following:\n" + "   A. WEEDS COMPETE VIGOROUSLY WITH RICE AND LOWER\n" + "      THE POTENTIAL YIELD.\n" + "   B. WHEN A HAND WEEDING IS DONE IN COMBINATION WITH\n" + "      ANOTHER METHOD, THE HAND WEEDING IS USUALLY DONE\n" + "      LAST (I.E. '31', NOT '13'!)\n" + "   C. IF YOU DESIRE NO WEEDING, ENTER 0 (ZERO).\n" + "\n" + "What weeding method(s) do you wish to use\n"
             return
 
           input: (line) ->
@@ -490,7 +490,7 @@
 
         setMolluscicide:
           _onEnter: ->
-            @snailAttacks++
+            @data.snailAttacks++
             @message = "\n" + "Oh my goodness! DURING THE WEED SURVEY MANY BRIGHT RED EGG\n" + "MASSES OF THE GOLDEN SNAIL WERE SEEN IN YOUR FIELDS. If you wish\n" + "you may spray MOLLUSCICIDE or remove the snails and eggs by\n" + "hand. You may also choose to do nothing.\n" + "\n" + "DO YOU WISH TO SPRAY A MOLLUSCICIDE?\n"
             return
 
@@ -508,7 +508,7 @@
 
         setHandPickSnails:
           _onEnter: ->
-            @snailAttacks++
+            @data.snailAttacks++
             @message = "\nDO YOU WISH TO HAND PICK YOUR FIELDS?\n"
             return
 
@@ -516,7 +516,7 @@
             response = @getYesNo(line)
             unless @errorFlag
               if response
-                @snailAttacks = 0
+                @data.snailAttacks = 0
                 @data.costs["molluscicide"] = 0
                 @data.hours["molluscicide"] = 60
               @transition "setWeedingStart"
@@ -599,7 +599,7 @@
 
             if @data.seedType is "IR64"
               r = Math.floor(Math.random() * 4)/100.0    # IR64 IS QUITE RESISTANT
-              @message += "LOOKS AS if BACTERIAL BLIGHT AND BLAST HAVE CAUSED ABOUT\n"
+              @message += "LOOKS AS IF BACTERIAL BLIGHT AND BLAST HAVE CAUSED ABOUT\n"
             else
               r = Math.floor(Math.random() * 13)/100.0    # local rice not resistant
               @message += "UNFORTUNATELY, GRASSY STUNT AND TUNGRO HAVE CAUSED ABOUT\n"
@@ -664,9 +664,9 @@
               @message += """
 
                 Brown plant hopper IS A VERY COMMON INSECT PEST. LOSS OF CROP
-                MAY BE ANYWHERE FROM 0% TO 15% if INSECTICIDE IS USED
+                MAY BE ANYWHERE FROM 0% TO 15% IF INSECTICIDE IS USED
                 AS SOON AS INFESTATION IS DISCOVERED (DEPENDING UPON DEGREE
-                OF INFESTATION). However, if CONTROLS ARE NOT USED, LOSSES
+                OF INFESTATION). However, IF CONTROLS ARE NOT USED, LOSSES
                 MAY RUN AS HIGH AS 30%. ON A SLIDING SCALE FROM 0 TO 10:
 
                 0 (NONE)...............5 (AVERAGE)..............10 (SEVERE)
@@ -736,7 +736,7 @@
           input: (line) ->
             response = @getYesNo(line)
             unless @errorFlag
-              r3 = (Math.random() * 6) + 1
+              r3 = Math.floor(Math.random() * 6) + 1
               @message = ""
               if response
                 if @data.runCount <= 4
@@ -1278,7 +1278,7 @@
             @message = """
               WHICH FACTOR DO YOU WISH TO CHANGE
 
-              ENTER '0' (ZERO) if YOU DESIRE NOT TO CHANGE ANYTHING.
+              ENTER '0' (ZERO) IF YOU DESIRE NOT TO CHANGE ANYTHING.
               OTHERWISE ENTER a number from the list below.
               1   'SIZE OF FARM'
               2   'COST OF OUTSIDE LABOR'
